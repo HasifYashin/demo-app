@@ -5,11 +5,13 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.pancakelab.controller.OrderController;
 import org.pancakelab.exceptions.NotEnoughPancakesException;
 import org.pancakelab.exceptions.OrderNotFoundException;
 import org.pancakelab.model.Order;
 import org.pancakelab.model.pancake.Pancake;
 import org.pancakelab.model.pancake.PancakeBuilder;
+import org.pancakelab.model.pancake.PancakeDirector;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,17 +25,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PancakeServiceTest {
     private OrderService orderService = new OrderService();
+    private OrderController orderController = new OrderController(orderService);
     private Order order = null;
     private Pancake darkChocolatePancake, milkChocolatePancake, milkChocolateHazelnutPancake;
 
     @BeforeAll
     public void setup() {
-        PancakeBuilder builder = new PancakeBuilder();
-        darkChocolatePancake = builder.addDarkChocolate().build();
-        builder.reset();
-        milkChocolatePancake = builder.addMilkChocolate().build();
-        builder.reset();
-        milkChocolateHazelnutPancake = builder.addMilkChocolate().addHazelNut().build();
+        PancakeDirector pancakeDirector = new PancakeDirector();
+        darkChocolatePancake = pancakeDirector.makeDarkChocolatePancake();
+        milkChocolatePancake = pancakeDirector.makeMilkChocolatePancake();
+        milkChocolateHazelnutPancake = pancakeDirector.makeMilkChocolateHazelnutPancake();
     }
 
     @Test
@@ -42,7 +43,7 @@ public class PancakeServiceTest {
         // setup
 
         // exercise
-        order = orderService.createOrder(10, 20);
+        order = orderController.createOrder(10, 20);
 
         assertEquals(10, order.getAddress().getBuilding());
         assertEquals(20, order.getAddress().getRoom());
@@ -85,9 +86,9 @@ public class PancakeServiceTest {
         // setup
 
         // exercise
-        orderService.removePancakes(darkChocolatePancake, order.getId(), 2);
-        orderService.removePancakes(milkChocolatePancake, order.getId(), 3);
-        orderService.removePancakes(milkChocolateHazelnutPancake, order.getId(), 1);
+        orderController.removePancakes("DARK_CHOCOLATE_PANCAKE", order.getId(), 2);
+        orderController.removePancakes("MILK_CHOCOLATE_PANCAKE", order.getId(), 3);
+        orderController.removePancakes("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", order.getId(), 1);
 
         // verify
         List<Pancake> pancakesInOrder = orderService.getPancakesInOrder(order.getId());
@@ -183,8 +184,8 @@ public class PancakeServiceTest {
     }
 
     private void addPancakes() throws OrderNotFoundException {
-        orderService.addDarkChocolatePancake(order.getId(), 3);
-        orderService.addMilkChocolatePancake(order.getId(), 3);
-        orderService.addMilkChocolateHazelnutsPancake(order.getId(), 3);
+        orderController.addPancake("DARK_CHOCOLATE_PANCAKE", order.getId(), 3);
+        orderController.addPancake("MILK_CHOCOLATE_PANCAKE", order.getId(), 3);
+        orderController.addPancake("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", order.getId(), 3);
     }
 }
