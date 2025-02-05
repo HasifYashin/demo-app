@@ -5,11 +5,7 @@ import java.util.List;
 
 import org.pancakelab.model.Order;
 
-/**
- * Receives orders once user has completed customization and order is now sent
- * for preparation
- */
-public class ChefService {
+public class DeliveryService {
     private final List<Order> orders = new ArrayList<>();
 
     public void addOrder(Order order) {
@@ -20,7 +16,8 @@ public class ChefService {
         return orders;
     }
 
-    public void prepareOrder(Order order) {
+    public void deliverOrder(Order order) {
         orders.remove(order);
     }
+
 }
