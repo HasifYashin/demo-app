@@ -67,7 +67,7 @@ public class PancakeServiceTest {
         addPancakes();
 
         // verify
-        List<Pancake> actualPancakes = orderService.getOrder(order.getId()).getPancakes();
+        List<Pancake> actualPancakes = orderController.getOrder(order.getId()).getPancakes();
         Map<Pancake, Integer> actualPancakesMap = new HashMap<>();
         for (Pancake pancake : actualPancakes) {
             actualPancakesMap.putIfAbsent(pancake, 0);
@@ -91,7 +91,7 @@ public class PancakeServiceTest {
         orderController.removePancakes("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", order.getId(), 1);
 
         // verify
-        List<Pancake> pancakesInOrder = orderService.getPancakesInOrder(order.getId());
+        List<Pancake> pancakesInOrder = orderController.getOrder(order.getId()).getPancakes();
 
         assertEquals(List.of(darkChocolatePancake,
                 milkChocolateHazelnutPancake,
