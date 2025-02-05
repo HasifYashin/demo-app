@@ -24,9 +24,8 @@ public class OrderLog {
                         order.getAddress().getRoom()));
     }
 
-    public static void logCancelOrder(Order order, List<PancakeRecipe> pancakes) {
-        long pancakesInOrder = pancakes.stream().filter(p -> p.getOrderId().equals(order.getId())).count();
-        log.append("Cancelled order %s with %d pancakes ".formatted(order.getId(), pancakesInOrder))
+    public static void logCancelOrder(Order order) {
+        log.append("Cancelled order %s with %d pancakes ".formatted(order.getId(), order.getPancakes().size()))
                 .append("for building %d, room %d.".formatted(order.getAddress().getBuilding(),
                         order.getAddress().getRoom()));
     }

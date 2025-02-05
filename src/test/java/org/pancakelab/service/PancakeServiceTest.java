@@ -166,7 +166,7 @@ public class PancakeServiceTest {
         addPancakes();
 
         // exercise
-        orderService.cancelOrder(order.getId());
+        orderController.cancelOrder(order.getId());
 
         // verify
         Set<UUID> completedOrders = orderController.listCompletedOrders();

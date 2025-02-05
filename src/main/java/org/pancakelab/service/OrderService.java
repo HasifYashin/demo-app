@@ -1,22 +1,15 @@
 package org.pancakelab.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 import org.pancakelab.exceptions.NotEnoughPancakesException;
 import org.pancakelab.exceptions.OrderNotFoundException;
 import org.pancakelab.model.Order;
 import org.pancakelab.model.pancake.Pancake;
-import org.pancakelab.model.pancakes.PancakeRecipe;
 
 public class OrderService {
     private List<Order> orders = new ArrayList<>();
-    private Set<UUID> completedOrders = new HashSet<>();
-    private Set<UUID> preparedOrders = new HashSet<>();
-    private List<PancakeRecipe> pancakes = new ArrayList<>();
 
     public Order createOrder(int building, int room) {
         Order order = new Order(building, room);
@@ -37,16 +30,9 @@ public class OrderService {
         OrderLog.logRemovePancakes(order, pancake, count);
     }
 
-    public void cancelOrder(UUID orderId) {
-        Order order = orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
-        OrderLog.logCancelOrder(order, this.pancakes);
-
-        pancakes.removeIf(pancake -> pancake.getOrderId().equals(orderId));
-        orders.removeIf(o -> o.getId().equals(orderId));
-        completedOrders.removeIf(u -> u.equals(orderId));
-        preparedOrders.removeIf(u -> u.equals(orderId));
-
-        OrderLog.logCancelOrder(order, pancakes);
+    public void cancelOrder(Order order) {
+        OrderLog.logCancelOrder(order);
+        orders.remove(order);
     }
 
     public void completeOrder(Order order) {

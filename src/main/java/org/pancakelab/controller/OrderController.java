@@ -69,6 +69,11 @@ public class OrderController {
         orderService.removePancakes(pancake, order, count);
     }
 
+    public void cancelOrder(UUID orderId) throws OrderNotFoundException {
+        Order order = getNotCompletedOrder(orderId);
+        orderService.cancelOrder(order);
+    }
+
     public void completeOrder(UUID orderId) throws OrderNotFoundException {
         Order order = getNotCompletedOrder(orderId);
         orderService.completeOrder(order);
