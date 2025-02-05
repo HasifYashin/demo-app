@@ -1,15 +1,16 @@
 package org.pancakelab.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import org.pancakelab.exceptions.NotEnoughPancakesException;
 import org.pancakelab.exceptions.OrderNotFoundException;
 import org.pancakelab.model.Order;
 import org.pancakelab.model.pancake.Pancake;
-import org.pancakelab.model.pancake.PancakeBuilder;
-import org.pancakelab.model.pancakes.*;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.IntStream;
+import org.pancakelab.model.pancakes.PancakeRecipe;
 
 public class OrderService {
     private List<Order> orders = new ArrayList<>();
@@ -23,14 +24,6 @@ public class OrderService {
         return order;
     }
 
-    public Order getOrder(UUID orderId) throws OrderNotFoundException {
-        try {
-            return orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
-        } catch (NoSuchElementException e) {
-            throw new OrderNotFoundException();
-        }
-    }
-
     public void addPancakes(Order order, Pancake pancake, int count) {
         for (int i = 0; i < count; ++i) {
             order.addPancake(pancake);
@@ -42,10 +35,6 @@ public class OrderService {
         return pancakes.stream()
                 .filter(pancake -> pancake.getOrderId().equals(orderId))
                 .map(PancakeRecipe::description).toList();
-    }
-
-    public List<Pancake> getPancakesInOrder(UUID orderId) throws OrderNotFoundException {
-        return getOrder(orderId).getPancakes();
     }
 
     public void removePancakes(Pancake pancake, Order order, int count)
@@ -66,12 +55,8 @@ public class OrderService {
         OrderLog.logCancelOrder(order, pancakes);
     }
 
-    public void completeOrder(UUID orderId) {
-        completedOrders.add(orderId);
-    }
-
-    public Set<UUID> listCompletedOrders() {
-        return completedOrders;
+    public void completeOrder(Order order) {
+        orders.remove(order);
     }
 
     public void prepareOrder(UUID orderId) {

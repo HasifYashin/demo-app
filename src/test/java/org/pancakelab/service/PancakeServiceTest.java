@@ -25,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PancakeServiceTest {
     private OrderService orderService = new OrderService();
-    private OrderController orderController = new OrderController(orderService);
+    private ChefService chefService = new ChefService();
+    private OrderController orderController = new OrderController(orderService, chefService);
     private Order order = null;
     private Pancake darkChocolatePancake, milkChocolatePancake, milkChocolateHazelnutPancake;
 
@@ -102,14 +103,14 @@ public class PancakeServiceTest {
 
     @Test
     @org.junit.jupiter.api.Order(40)
-    public void GivenOrderExists_WhenCompletingOrder_ThenOrderCompleted_Test() {
+    public void GivenOrderExists_WhenCompletingOrder_ThenOrderCompleted_Test() throws Exception {
         // setup
 
         // exercise
-        orderService.completeOrder(order.getId());
+        orderController.completeOrder(order.getId());
 
         // verify
-        Set<UUID> completedOrdersOrders = orderService.listCompletedOrders();
+        Set<UUID> completedOrdersOrders = orderController.listCompletedOrders();
         assertTrue(completedOrdersOrders.contains(order.getId()));
 
         // tear down
@@ -124,7 +125,7 @@ public class PancakeServiceTest {
         orderService.prepareOrder(order.getId());
 
         // verify
-        Set<UUID> completedOrders = orderService.listCompletedOrders();
+        Set<UUID> completedOrders = orderController.listCompletedOrders();
         assertFalse(completedOrders.contains(order.getId()));
 
         Set<UUID> preparedOrders = orderService.listPreparedOrders();
@@ -143,7 +144,7 @@ public class PancakeServiceTest {
         Object[] deliveredOrder = orderService.deliverOrder(order.getId());
 
         // verify
-        Set<UUID> completedOrders = orderService.listCompletedOrders();
+        Set<UUID> completedOrders = orderController.listCompletedOrders();
         assertFalse(completedOrders.contains(order.getId()));
 
         Set<UUID> preparedOrders = orderService.listPreparedOrders();
@@ -170,7 +171,7 @@ public class PancakeServiceTest {
         orderService.cancelOrder(order.getId());
 
         // verify
-        Set<UUID> completedOrders = orderService.listCompletedOrders();
+        Set<UUID> completedOrders = orderController.listCompletedOrders();
         assertFalse(completedOrders.contains(order.getId()));
 
         Set<UUID> preparedOrders = orderService.listPreparedOrders();
