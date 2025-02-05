@@ -8,4 +8,12 @@ public class Address {
         this.building = building;
         this.room = room;
     }
+
+    public int getBuilding() {
+        return building;
+    }
+
+    public int getRoom() {
+        return room;
+    }
 }
