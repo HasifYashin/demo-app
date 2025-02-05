@@ -1,7 +1,9 @@
 package org.pancakelab.service;
 
+import org.pancakelab.exceptions.NotEnoughPancakesException;
 import org.pancakelab.exceptions.OrderNotFoundException;
 import org.pancakelab.model.Order;
+import org.pancakelab.model.pancake.Pancake;
 import org.pancakelab.model.pancake.PancakeBuilder;
 import org.pancakelab.model.pancakes.*;
 
@@ -70,16 +72,14 @@ public class OrderService {
                 .map(PancakeRecipe::description).toList();
     }
 
-    public void removePancakes(String description, UUID orderId, int count) {
-        final AtomicInteger removedCount = new AtomicInteger(0);
-        pancakes.removeIf(pancake -> {
-            return pancake.getOrderId().equals(orderId) &&
-                    pancake.description().equals(description) &&
-                    removedCount.getAndIncrement() < count;
-        });
+    public List<Pancake> getPancakesInOrder(UUID orderId) throws OrderNotFoundException {
+        return getOrder(orderId).getPancakes();
+    }
 
-        Order order = orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
-        OrderLog.logRemovePancakes(order, description, removedCount.get(), pancakes);
+    public void removePancakes(Pancake pancake, UUID orderId, int count)
+            throws NotEnoughPancakesException, OrderNotFoundException {
+        getOrder(orderId).removePancakes(pancake, count);
+        // OrderLog.logRemovePancakes(order, description, removedCount.get(), pancakes);
     }
 
     public void cancelOrder(UUID orderId) {
