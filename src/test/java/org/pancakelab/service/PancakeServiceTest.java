@@ -1,17 +1,8 @@
 package org.pancakelab.service;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.pancakelab.controller.OrderController;
-import org.pancakelab.exceptions.NotEnoughPancakesException;
-import org.pancakelab.exceptions.OrderNotFoundException;
-import org.pancakelab.model.Order;
-import org.pancakelab.model.pancake.Pancake;
-import org.pancakelab.model.pancake.PancakeBuilder;
-import org.pancakelab.model.pancake.PancakeDirector;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,14 +10,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.pancakelab.controller.OrderController;
+import org.pancakelab.exceptions.OrderNotFoundException;
+import org.pancakelab.model.Order;
+import org.pancakelab.model.pancake.Pancake;
+import org.pancakelab.model.pancake.PancakeDirector;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PancakeServiceTest {
     private OrderService orderService = new OrderService();
     private ChefService chefService = new ChefService();
-    private OrderController orderController = new OrderController(orderService, chefService);
+    private DeliveryService deliveryService = new DeliveryService();
+    private OrderController orderController = new OrderController(orderService, chefService, deliveryService);
     private Order order = null;
     private Pancake darkChocolatePancake, milkChocolatePancake, milkChocolateHazelnutPancake;
 
@@ -118,17 +119,17 @@ public class PancakeServiceTest {
 
     @Test
     @org.junit.jupiter.api.Order(50)
-    public void GivenOrderExists_WhenPreparingOrder_ThenOrderPrepared_Test() {
+    public void GivenOrderExists_WhenPreparingOrder_ThenOrderPrepared_Test() throws Exception {
         // setup
 
         // exercise
-        orderService.prepareOrder(order.getId());
+        orderController.prepareOrder(order.getId());
 
         // verify
         Set<UUID> completedOrders = orderController.listCompletedOrders();
         assertFalse(completedOrders.contains(order.getId()));
 
-        Set<UUID> preparedOrders = orderService.listPreparedOrders();
+        Set<UUID> preparedOrders = orderController.listPreparedOrders();
         assertTrue(preparedOrders.contains(order.getId()));
 
         // tear down
@@ -147,7 +148,7 @@ public class PancakeServiceTest {
         Set<UUID> completedOrders = orderController.listCompletedOrders();
         assertFalse(completedOrders.contains(order.getId()));
 
-        Set<UUID> preparedOrders = orderService.listPreparedOrders();
+        Set<UUID> preparedOrders = orderController.listPreparedOrders();
         assertFalse(preparedOrders.contains(order.getId()));
 
         List<String> ordersPancakes = orderService.viewOrder(order.getId());
@@ -174,7 +175,7 @@ public class PancakeServiceTest {
         Set<UUID> completedOrders = orderController.listCompletedOrders();
         assertFalse(completedOrders.contains(order.getId()));
 
-        Set<UUID> preparedOrders = orderService.listPreparedOrders();
+        Set<UUID> preparedOrders = orderController.listPreparedOrders();
         assertFalse(preparedOrders.contains(order.getId()));
 
         List<String> ordersPancakes = orderService.viewOrder(order.getId());

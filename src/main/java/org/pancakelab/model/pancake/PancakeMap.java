@@ -12,7 +12,7 @@ public class PancakeMap {
         pancakes.put("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", pancakeDirector.makeMilkChocolateHazelnutPancake());
     }
 
-    public Pancake getPancake(String type) {
+    public static Pancake getPancake(String type) {
         return pancakes.get(type);
     }
 }

@@ -21,13 +21,10 @@ public class OrderController {
     private final ChefService chefService;
     private final DeliveryService deliveryService;
 
-    private final PancakeMap pancakeMap;
-
     public OrderController(OrderService orderService, ChefService chefService, DeliveryService deliveryService) {
         this.orderService = orderService;
         this.chefService = chefService;
         this.deliveryService = deliveryService;
-        this.pancakeMap = new PancakeMap();
     }
 
     public Order createOrder(int building, int room) {
@@ -61,14 +58,14 @@ public class OrderController {
     public void addPancake(String type, UUID orderId, int count) throws OrderNotFoundException {
         Order order = getNotCompletedOrder(orderId);
         // TODO: Invalid exception
-        Pancake pancake = pancakeMap.getPancake(type);
+        Pancake pancake = PancakeMap.getPancake(type);
         orderService.addPancakes(order, pancake, count);
     }
 
     public void removePancakes(String type, UUID orderId, int count)
             throws NotEnoughPancakesException, OrderNotFoundException {
         Order order = getNotCompletedOrder(orderId);
-        Pancake pancake = pancakeMap.getPancake(type);
+        Pancake pancake = PancakeMap.getPancake(type);
         orderService.removePancakes(pancake, order, count);
     }
 
@@ -81,4 +78,15 @@ public class OrderController {
     public Set<UUID> listCompletedOrders() {
         return chefService.getOrders().stream().map(Order::getId).collect(Collectors.toSet());
     }
+
+    public void prepareOrder(UUID orderId) throws OrderNotFoundException {
+        Order order = getNotPreparedOrder(orderId);
+        chefService.prepareOrder(order);
+        deliveryService.addOrder(order);
+    }
+
+    public Set<UUID> listPreparedOrders() {
+        return deliveryService.getOrders().stream().map(Order::getId).collect(Collectors.toSet());
+    }
+
 }

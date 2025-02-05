@@ -59,15 +59,6 @@ public class OrderService {
         orders.remove(order);
     }
 
-    public void prepareOrder(UUID orderId) {
-        preparedOrders.add(orderId);
-        completedOrders.removeIf(u -> u.equals(orderId));
-    }
-
-    public Set<UUID> listPreparedOrders() {
-        return preparedOrders;
-    }
-
     public Object[] deliverOrder(UUID orderId) {
         if (!preparedOrders.contains(orderId))
             return null;
