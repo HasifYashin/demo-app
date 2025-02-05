@@ -31,9 +31,8 @@ public class OrderLog {
                         order.getAddress().getRoom()));
     }
 
-    public static void logDeliverOrder(Order order, List<PancakeRecipe> pancakes) {
-        long pancakesInOrder = pancakes.stream().filter(p -> p.getOrderId().equals(order.getId())).count();
-        log.append("Order %s with %d pancakes ".formatted(order.getId(), pancakesInOrder))
+    public static void logDeliverOrder(Order order) {
+        log.append("Order %s with %d pancakes ".formatted(order.getId(), order.getPancakes().size()))
                 .append("for building %d, room %d out for delivery.".formatted(order.getAddress().getBuilding(),
                         order.getAddress().getRoom()));
     }

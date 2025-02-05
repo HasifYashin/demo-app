@@ -31,12 +31,6 @@ public class OrderService {
         }
     }
 
-    public List<String> viewOrder(UUID orderId) {
-        return pancakes.stream()
-                .filter(pancake -> pancake.getOrderId().equals(orderId))
-                .map(PancakeRecipe::description).toList();
-    }
-
     public void removePancakes(Pancake pancake, Order order, int count)
             throws NotEnoughPancakesException, OrderNotFoundException {
         order.removePancakes(pancake, count);
@@ -57,21 +51,6 @@ public class OrderService {
 
     public void completeOrder(Order order) {
         orders.remove(order);
-    }
-
-    public Object[] deliverOrder(UUID orderId) {
-        if (!preparedOrders.contains(orderId))
-            return null;
-
-        Order order = orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
-        List<String> pancakesToDeliver = viewOrder(orderId);
-        OrderLog.logDeliverOrder(order, this.pancakes);
-
-        pancakes.removeIf(pancake -> pancake.getOrderId().equals(orderId));
-        orders.removeIf(o -> o.getId().equals(orderId));
-        preparedOrders.removeIf(u -> u.equals(orderId));
-
-        return new Object[] { order, pancakesToDeliver };
     }
 
     public List<Order> getOrders() {

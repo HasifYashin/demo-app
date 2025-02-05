@@ -17,6 +17,7 @@ public class DeliveryService {
     }
 
     public void deliverOrder(Order order) {
+        OrderLog.logDeliverOrder(order);
         orders.remove(order);
     }
 

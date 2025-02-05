@@ -137,12 +137,12 @@ public class PancakeServiceTest {
 
     @Test
     @org.junit.jupiter.api.Order(60)
-    public void GivenOrderExists_WhenDeliveringOrder_ThenCorrectOrderReturnedAndOrderRemovedFromTheDatabase_Test() {
+    public void GivenOrderExists_WhenDeliveringOrder_ThenCorrectOrderReturnedAndOrderRemovedFromTheDatabase_Test()
+            throws Exception {
         // setup
-        List<String> pancakesToDeliver = orderService.viewOrder(order.getId());
 
         // exercise
-        Object[] deliveredOrder = orderService.deliverOrder(order.getId());
+        Order deliveredOrder = orderController.deliverOrder(order.getId());
 
         // verify
         Set<UUID> completedOrders = orderController.listCompletedOrders();
@@ -151,11 +151,8 @@ public class PancakeServiceTest {
         Set<UUID> preparedOrders = orderController.listPreparedOrders();
         assertFalse(preparedOrders.contains(order.getId()));
 
-        List<String> ordersPancakes = orderService.viewOrder(order.getId());
-
-        assertEquals(List.of(), ordersPancakes);
-        assertEquals(order.getId(), ((Order) deliveredOrder[0]).getId());
-        assertEquals(pancakesToDeliver, (List<String>) deliveredOrder[1]);
+        assertEquals(order.getId(), deliveredOrder.getId());
+        assertEquals(order.getPancakes(), deliveredOrder.getPancakes());
 
         // tear down
         order = null;
@@ -163,7 +160,7 @@ public class PancakeServiceTest {
 
     @Test
     @org.junit.jupiter.api.Order(70)
-    public void GivenOrderExists_WhenCancellingOrder_ThenOrderAndPancakesRemoved_Test() throws Exception {
+    public void GivenOrderExists_WhenCancellingOrder_ThenOrderRemoved_Test() throws Exception {
         // setup
         order = orderService.createOrder(10, 20);
         addPancakes();
@@ -177,10 +174,6 @@ public class PancakeServiceTest {
 
         Set<UUID> preparedOrders = orderController.listPreparedOrders();
         assertFalse(preparedOrders.contains(order.getId()));
-
-        List<String> ordersPancakes = orderService.viewOrder(order.getId());
-
-        assertEquals(List.of(), ordersPancakes);
 
         // tear down
     }

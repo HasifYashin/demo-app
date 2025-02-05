@@ -89,4 +89,9 @@ public class OrderController {
         return deliveryService.getOrders().stream().map(Order::getId).collect(Collectors.toSet());
     }
 
+    public Order deliverOrder(UUID orderId) throws OrderNotFoundException {
+        Order order = getNotDeliveredOrder(orderId);
+        deliveryService.deliverOrder(order);
+        return order;
+    }
 }
