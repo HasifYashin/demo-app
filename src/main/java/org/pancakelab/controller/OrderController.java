@@ -5,15 +5,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.pancakelab.exceptions.NoSuchPancakeTypeException;
 import org.pancakelab.exceptions.NotEnoughPancakesException;
 import org.pancakelab.exceptions.OrderNotFoundException;
 import org.pancakelab.model.Order;
 import org.pancakelab.model.pancake.Pancake;
-import org.pancakelab.model.pancake.PancakeBuilder;
 import org.pancakelab.model.pancake.PancakeMap;
 import org.pancakelab.service.ChefService;
 import org.pancakelab.service.DeliveryService;
-import org.pancakelab.service.OrderLog;
 import org.pancakelab.service.OrderService;
 
 public class OrderController {
@@ -27,6 +26,8 @@ public class OrderController {
         this.deliveryService = deliveryService;
     }
 
+    /* Order creation methods */
+
     public Order createOrder(int building, int room) {
         return orderService.createOrder(building, room);
     }
@@ -34,36 +35,20 @@ public class OrderController {
     public Order getNotCompletedOrder(UUID orderId) throws OrderNotFoundException {
         try {
             return orderService.getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
-        } catch (NoSuchElementException e3) {
+        } catch (NoSuchElementException e) {
             throw new OrderNotFoundException();
         }
     }
 
-    public Order getNotPreparedOrder(UUID orderId) throws OrderNotFoundException {
-        try {
-            return chefService.getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
-        } catch (NoSuchElementException e1) {
-            throw new OrderNotFoundException();
-        }
-    }
-
-    public Order getNotDeliveredOrder(UUID orderId) throws OrderNotFoundException {
-        try {
-            return deliveryService.getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
-        } catch (NoSuchElementException e1) {
-            throw new OrderNotFoundException();
-        }
-    }
-
-    public void addPancake(String type, UUID orderId, int count) throws OrderNotFoundException {
+    public void addPancake(String type, UUID orderId, int count)
+            throws OrderNotFoundException, NoSuchPancakeTypeException {
         Order order = getNotCompletedOrder(orderId);
-        // TODO: Invalid exception
         Pancake pancake = PancakeMap.getPancake(type);
         orderService.addPancakes(order, pancake, count);
     }
 
     public void removePancakes(String type, UUID orderId, int count)
-            throws NotEnoughPancakesException, OrderNotFoundException {
+            throws NotEnoughPancakesException, OrderNotFoundException, NoSuchPancakeTypeException {
         Order order = getNotCompletedOrder(orderId);
         Pancake pancake = PancakeMap.getPancake(type);
         orderService.removePancakes(pancake, order, count);
@@ -80,6 +65,16 @@ public class OrderController {
         chefService.addOrder(order);
     }
 
+    /* Order preperation (Chef) methods */
+
+    public Order getNotPreparedOrder(UUID orderId) throws OrderNotFoundException {
+        try {
+            return chefService.getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
+        } catch (NoSuchElementException e) {
+            throw new OrderNotFoundException();
+        }
+    }
+
     public Set<UUID> listCompletedOrders() {
         return chefService.getOrders().stream().map(Order::getId).collect(Collectors.toSet());
     }
@@ -88,6 +83,16 @@ public class OrderController {
         Order order = getNotPreparedOrder(orderId);
         chefService.prepareOrder(order);
         deliveryService.addOrder(order);
+    }
+
+    /* Order delivery methods */
+
+    public Order getNotDeliveredOrder(UUID orderId) throws OrderNotFoundException {
+        try {
+            return deliveryService.getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
+        } catch (NoSuchElementException e) {
+            throw new OrderNotFoundException();
+        }
     }
 
     public Set<UUID> listPreparedOrders() {

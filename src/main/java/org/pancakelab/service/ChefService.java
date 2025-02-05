@@ -6,8 +6,8 @@ import java.util.List;
 import org.pancakelab.model.Order;
 
 /**
- * Receives orders once user has completed customization and order is now sent
- * for preparation
+ * Class handling preperation of orders.
+ * It receives an once a user has completed it.
  */
 public class ChefService {
     private final List<Order> orders = new ArrayList<>();

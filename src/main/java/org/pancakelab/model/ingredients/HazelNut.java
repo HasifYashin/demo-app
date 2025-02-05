@@ -4,7 +4,7 @@ public class HazelNut extends Ingredient {
     private static final String DESCRIPTION = "Hazelnut";
     private static HazelNut instance;
 
-    public static HazelNut of() {
+    public static HazelNut getInstance() {
         if (instance == null) {
             synchronized (DarkChocolate.class) {
                 if (instance == null) {

@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.pancakelab.model.Order;
 
+/**
+ * Class handling delivery of orders.
+ * It receives an order once the chef has prepared it.
+ */
+
 public class DeliveryService {
     private final List<Order> orders = new ArrayList<>();
 

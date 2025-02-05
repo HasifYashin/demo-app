@@ -13,6 +13,10 @@ public class Pancake {
         return ingredients;
     }
 
+    public String getDescription() {
+        return ingredients.stream().map(Ingredient::getDescription).collect(Collectors.joining(" ")) + " Pancake";
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -38,7 +42,4 @@ public class Pancake {
         return true;
     }
 
-    public String getDescription() {
-        return ingredients.stream().map(Ingredient::getDescription).collect(Collectors.joining(" ")) + " Pancake";
-    }
 }

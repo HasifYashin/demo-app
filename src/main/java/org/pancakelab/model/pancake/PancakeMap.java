@@ -3,6 +3,8 @@ package org.pancakelab.model.pancake;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.pancakelab.exceptions.NoSuchPancakeTypeException;
+
 public class PancakeMap {
     private final static Map<String, Pancake> pancakes = new HashMap<>();
     static {
@@ -12,7 +14,9 @@ public class PancakeMap {
         pancakes.put("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", pancakeDirector.makeMilkChocolateHazelnutPancake());
     }
 
-    public static Pancake getPancake(String type) {
+    public static Pancake getPancake(String type) throws NoSuchPancakeTypeException {
+        if (!pancakes.containsKey(type))
+            throw new NoSuchPancakeTypeException();
         return pancakes.get(type);
     }
 }

@@ -4,7 +4,7 @@ public class DarkChocolate extends Chocolate {
     private static final String DESCRIPTION = "Dark Chocolate";
     private static DarkChocolate instance;
 
-    public static DarkChocolate of() {
+    public static DarkChocolate getInstance() {
         if (instance == null) {
             synchronized (DarkChocolate.class) {
                 if (instance == null) {

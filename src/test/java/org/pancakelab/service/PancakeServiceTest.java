@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.pancakelab.controller.OrderController;
-import org.pancakelab.exceptions.OrderNotFoundException;
 import org.pancakelab.model.Order;
 import org.pancakelab.model.pancake.Pancake;
 import org.pancakelab.model.pancake.PancakeDirector;
@@ -93,11 +92,11 @@ public class PancakeServiceTest {
         orderController.removePancakes("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", order.getId(), 1);
 
         // verify
-        List<Pancake> pancakesInOrder = orderController.getNotCompletedOrder(order.getId()).getPancakes();
+        List<Pancake> pancakesLeftInOrder = orderController.getNotCompletedOrder(order.getId()).getPancakes();
 
         assertEquals(List.of(darkChocolatePancake,
                 milkChocolateHazelnutPancake,
-                milkChocolateHazelnutPancake), pancakesInOrder);
+                milkChocolateHazelnutPancake), pancakesLeftInOrder);
 
         // tear down
     }
@@ -178,7 +177,7 @@ public class PancakeServiceTest {
         // tear down
     }
 
-    private void addPancakes() throws OrderNotFoundException {
+    private void addPancakes() throws Exception {
         orderController.addPancake("DARK_CHOCOLATE_PANCAKE", order.getId(), 3);
         orderController.addPancake("MILK_CHOCOLATE_PANCAKE", order.getId(), 3);
         orderController.addPancake("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", order.getId(), 3);

@@ -2,9 +2,6 @@ package org.pancakelab.service;
 
 import org.pancakelab.model.Order;
 import org.pancakelab.model.pancake.Pancake;
-import org.pancakelab.model.pancakes.PancakeRecipe;
-
-import java.util.List;
 
 public class OrderLog {
     private static final StringBuilder log = new StringBuilder();

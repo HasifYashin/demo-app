@@ -13,22 +13,22 @@ public class PancakeBuilder {
     }
 
     public PancakeBuilder addDarkChocolate() {
-        pancake.getIngredients().add(DarkChocolate.of());
+        pancake.getIngredients().add(DarkChocolate.getInstance());
         return this;
     }
 
     public PancakeBuilder addMilkChocolate() {
-        pancake.getIngredients().add(MilkChocolate.of());
+        pancake.getIngredients().add(MilkChocolate.getInstance());
         return this;
     }
 
     public PancakeBuilder addHazelNut() {
-        pancake.getIngredients().add(HazelNut.of());
+        pancake.getIngredients().add(HazelNut.getInstance());
         return this;
     }
 
     public PancakeBuilder addWhippedCream() {
-        pancake.getIngredients().add(WhippedCream.of());
+        pancake.getIngredients().add(WhippedCream.getInstance());
         return this;
     }
 
