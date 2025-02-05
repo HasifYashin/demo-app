@@ -12,7 +12,7 @@ import org.pancakelab.model.Order;
 public class ChefService {
     private final List<Order> orders = new ArrayList<>();
 
-    public void addOrder(Order order) {
+    public synchronized void addOrder(Order order) {
         orders.add(order);
     }
 
@@ -20,7 +20,8 @@ public class ChefService {
         return orders;
     }
 
-    public void prepareOrder(Order order) {
+    public synchronized void prepareOrder(Order order) {
+        OrderLog.logPrepareOrder(order);
         orders.remove(order);
     }
 }

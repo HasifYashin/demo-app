@@ -27,6 +27,18 @@ public class OrderLog {
                         order.getAddress().getRoom()));
     }
 
+    public static void logCompleteOrder(Order order) {
+        log.append("Completed(Placed) order %s with %d pancakes ".formatted(order.getId(), order.getPancakes().size()))
+                .append("for building %d, room %d.".formatted(order.getAddress().getBuilding(),
+                        order.getAddress().getRoom()));
+    }
+
+    public static void logPrepareOrder(Order order) {
+        log.append("Order %s with %d pancakes ".formatted(order.getId(), order.getPancakes().size()))
+                .append("for building %d, room %d prepared.".formatted(order.getAddress().getBuilding(),
+                        order.getAddress().getRoom()));
+    }
+
     public static void logDeliverOrder(Order order) {
         log.append("Order %s with %d pancakes ".formatted(order.getId(), order.getPancakes().size()))
                 .append("for building %d, room %d out for delivery.".formatted(order.getAddress().getBuilding(),

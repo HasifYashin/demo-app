@@ -161,7 +161,7 @@ public class PancakeServiceTest {
     @org.junit.jupiter.api.Order(70)
     public void GivenOrderExists_WhenCancellingOrder_ThenOrderRemoved_Test() throws Exception {
         // setup
-        order = orderService.createOrder(10, 20);
+        order = orderController.createOrder(10, 20);
         addPancakes();
 
         // exercise

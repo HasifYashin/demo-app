@@ -11,7 +11,7 @@ import org.pancakelab.model.pancake.Pancake;
 public class OrderService {
     private List<Order> orders = new ArrayList<>();
 
-    public Order createOrder(int building, int room) {
+    public synchronized Order createOrder(int building, int room) {
         Order order = new Order(building, room);
         orders.add(order);
         return order;
@@ -30,12 +30,13 @@ public class OrderService {
         OrderLog.logRemovePancakes(order, pancake, count);
     }
 
-    public void cancelOrder(Order order) {
+    public synchronized void cancelOrder(Order order) {
         OrderLog.logCancelOrder(order);
         orders.remove(order);
     }
 
-    public void completeOrder(Order order) {
+    public synchronized void completeOrder(Order order) {
+        OrderLog.logCompleteOrder(order);
         orders.remove(order);
     }
 
