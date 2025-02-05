@@ -30,8 +30,9 @@ public class Order {
         return address;
     }
 
-    public synchronized void addPancake(Pancake pancake) {
+    public synchronized Pancake addPancake(Pancake pancake) {
         pancakes.add(pancake);
+        return pancake;
     }
 
     public synchronized void removePancakes(Pancake toRemove, int count) throws NotEnoughPancakesException {

@@ -1,6 +1,7 @@
 package org.pancakelab.model.ingredients;
 
 public class WhippedCream extends Ingredient {
+    private static final String DESCRIPTION = "Whipped cream";
     private static WhippedCream instance;
 
     public static WhippedCream of() {
@@ -12,5 +13,10 @@ public class WhippedCream extends Ingredient {
             }
         }
         return instance;
+    }
+
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
     }
 }

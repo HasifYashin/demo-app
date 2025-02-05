@@ -2,6 +2,7 @@ package org.pancakelab.model.pancake;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.pancakelab.model.ingredients.Ingredient;
 
@@ -37,4 +38,7 @@ public class Pancake {
         return true;
     }
 
+    public String getDescription() {
+        return ingredients.stream().map(Ingredient::getDescription).collect(Collectors.joining(" ")) + " Pancake";
+    }
 }

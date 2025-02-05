@@ -34,35 +34,41 @@ public class OrderService {
     public void addDarkChocolatePancake(UUID orderId, int count) throws OrderNotFoundException {
         Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            order.addPancake(new PancakeBuilder().addDarkChocolate().build());
+            Pancake pancake = order.addPancake(new PancakeBuilder().addDarkChocolate().build());
+            OrderLog.logAddPancake(order, pancake);
         }
     }
 
     public void addDarkChocolateWhippedCreamPancake(UUID orderId, int count) throws OrderNotFoundException {
         Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            order.addPancake(new PancakeBuilder().addDarkChocolate().addWhippedCream().build());
+            Pancake pancake = order.addPancake(new PancakeBuilder().addDarkChocolate().addWhippedCream().build());
+            OrderLog.logAddPancake(order, pancake);
         }
     }
 
     public void addDarkChocolateWhippedCreamHazelnutsPancake(UUID orderId, int count) throws OrderNotFoundException {
         Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            order.addPancake(new PancakeBuilder().addDarkChocolate().addWhippedCream().addHazelNut().build());
+            Pancake pancake = order
+                    .addPancake(new PancakeBuilder().addDarkChocolate().addWhippedCream().addHazelNut().build());
+            OrderLog.logAddPancake(order, pancake);
         }
     }
 
     public void addMilkChocolatePancake(UUID orderId, int count) throws OrderNotFoundException {
         Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            order.addPancake(new PancakeBuilder().addMilkChocolate().build());
+            Pancake pancake = order.addPancake(new PancakeBuilder().addMilkChocolate().build());
+            OrderLog.logAddPancake(order, pancake);
         }
     }
 
     public void addMilkChocolateHazelnutsPancake(UUID orderId, int count) throws OrderNotFoundException {
         Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            order.addPancake(new PancakeBuilder().addMilkChocolate().addHazelNut().build());
+            Pancake pancake = order.addPancake(new PancakeBuilder().addMilkChocolate().addHazelNut().build());
+            OrderLog.logAddPancake(order, pancake);
         }
     }
 
@@ -78,8 +84,9 @@ public class OrderService {
 
     public void removePancakes(Pancake pancake, UUID orderId, int count)
             throws NotEnoughPancakesException, OrderNotFoundException {
-        getOrder(orderId).removePancakes(pancake, count);
-        // OrderLog.logRemovePancakes(order, description, removedCount.get(), pancakes);
+        Order order = getOrder(orderId);
+        order.removePancakes(pancake, count);
+        OrderLog.logRemovePancakes(order, pancake, count);
     }
 
     public void cancelOrder(UUID orderId) {

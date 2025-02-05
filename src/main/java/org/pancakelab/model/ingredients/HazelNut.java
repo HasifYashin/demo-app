@@ -1,6 +1,7 @@
 package org.pancakelab.model.ingredients;
 
 public class HazelNut extends Ingredient {
+    private static final String DESCRIPTION = "Hazelnut";
     private static HazelNut instance;
 
     public static HazelNut of() {
@@ -14,4 +15,8 @@ public class HazelNut extends Ingredient {
         return instance;
     }
 
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
+    }
 }

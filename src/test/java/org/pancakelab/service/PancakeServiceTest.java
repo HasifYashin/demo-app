@@ -36,10 +36,6 @@ public class PancakeServiceTest {
         milkChocolateHazelnutPancake = builder.addMilkChocolate().addHazelNut().build();
     }
 
-    private final static String DARK_CHOCOLATE_PANCAKE_DESCRIPTION = "Delicious pancake with dark chocolate!";
-    private final static String MILK_CHOCOLATE_PANCAKE_DESCRIPTION = "Delicious pancake with milk chocolate!";
-    private final static String MILK_CHOCOLATE_HAZELNUTS_PANCAKE_DESCRIPTION = "Delicious pancake with milk chocolate, hazelnuts!";
-
     @Test
     @org.junit.jupiter.api.Order(10)
     public void GivenOrderDoesNotExist_WhenCreatingOrder_ThenOrderCreatedWithCorrectData_Test() {
@@ -54,6 +50,11 @@ public class PancakeServiceTest {
         // verify
 
         // tear down
+    }
+
+    @Test
+    public void GivenDarkchocolatePancake_ThenCorrectDescription_Test() {
+        assertEquals("Dark Chocolate Pancake", darkChocolatePancake.getDescription());
     }
 
     @Test

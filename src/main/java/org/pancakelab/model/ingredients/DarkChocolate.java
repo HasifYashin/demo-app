@@ -1,6 +1,7 @@
 package org.pancakelab.model.ingredients;
 
 public class DarkChocolate extends Chocolate {
+    private static final String DESCRIPTION = "Dark Chocolate";
     private static DarkChocolate instance;
 
     public static DarkChocolate of() {
@@ -13,4 +14,10 @@ public class DarkChocolate extends Chocolate {
         }
         return instance;
     }
+
+    @Override
+    public String getDescription() {
+        return DESCRIPTION;
+    }
+
 }
