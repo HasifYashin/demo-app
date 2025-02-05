@@ -6,25 +6,29 @@ import org.pancakelab.model.ingredients.MilkChocolate;
 import org.pancakelab.model.ingredients.WhippedCream;
 
 public class PancakeBuilder {
-    private final Pancake pancake = new Pancake();
+    private Pancake pancake = new Pancake();
+
+    public void reset() {
+        pancake = new Pancake();
+    }
 
     public PancakeBuilder addDarkChocolate() {
-        pancake.getIngredients().add(new DarkChocolate());
+        pancake.getIngredients().add(DarkChocolate.of());
         return this;
     }
 
     public PancakeBuilder addMilkChocolate() {
-        pancake.getIngredients().add(new MilkChocolate());
+        pancake.getIngredients().add(MilkChocolate.of());
         return this;
     }
 
     public PancakeBuilder addHazelNut() {
-        pancake.getIngredients().add(new HazelNut());
+        pancake.getIngredients().add(HazelNut.of());
         return this;
     }
 
     public PancakeBuilder addWhippedCream() {
-        pancake.getIngredients().add(new WhippedCream());
+        pancake.getIngredients().add(WhippedCream.of());
         return this;
     }
 

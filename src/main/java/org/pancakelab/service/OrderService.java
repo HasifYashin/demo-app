@@ -1,10 +1,13 @@
 package org.pancakelab.service;
 
+import org.pancakelab.exceptions.OrderNotFoundException;
 import org.pancakelab.model.Order;
+import org.pancakelab.model.pancake.PancakeBuilder;
 import org.pancakelab.model.pancakes.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 public class OrderService {
     private List<Order> orders = new ArrayList<>();
@@ -18,38 +21,46 @@ public class OrderService {
         return order;
     }
 
-    public void addDarkChocolatePancake(UUID orderId, int count) {
-        for (int i = 0; i < count; ++i) {
-            addPancake(new DarkChocolatePancake(),
-                    orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get());
+    public Order getOrder(UUID orderId) throws OrderNotFoundException {
+        try {
+            return orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get();
+        } catch (NoSuchElementException e) {
+            throw new OrderNotFoundException();
         }
     }
 
-    public void addDarkChocolateWhippedCreamPancake(UUID orderId, int count) {
+    public void addDarkChocolatePancake(UUID orderId, int count) throws OrderNotFoundException {
+        Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            addPancake(new DarkChocolateWhippedCreamPancake(),
-                    orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get());
+            order.addPancake(new PancakeBuilder().addDarkChocolate().build());
         }
     }
 
-    public void addDarkChocolateWhippedCreamHazelnutsPancake(UUID orderId, int count) {
+    public void addDarkChocolateWhippedCreamPancake(UUID orderId, int count) throws OrderNotFoundException {
+        Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            addPancake(new DarkChocolateWhippedCreamHazelnutsPancake(),
-                    orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get());
+            order.addPancake(new PancakeBuilder().addDarkChocolate().addWhippedCream().build());
         }
     }
 
-    public void addMilkChocolatePancake(UUID orderId, int count) {
+    public void addDarkChocolateWhippedCreamHazelnutsPancake(UUID orderId, int count) throws OrderNotFoundException {
+        Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            addPancake(new MilkChocolatePancake(),
-                    orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get());
+            order.addPancake(new PancakeBuilder().addDarkChocolate().addWhippedCream().addHazelNut().build());
         }
     }
 
-    public void addMilkChocolateHazelnutsPancake(UUID orderId, int count) {
+    public void addMilkChocolatePancake(UUID orderId, int count) throws OrderNotFoundException {
+        Order order = getOrder(orderId);
         for (int i = 0; i < count; ++i) {
-            addPancake(new MilkChocolateHazelnutsPancake(),
-                    orders.stream().filter(o -> o.getId().equals(orderId)).findFirst().get());
+            order.addPancake(new PancakeBuilder().addMilkChocolate().build());
+        }
+    }
+
+    public void addMilkChocolateHazelnutsPancake(UUID orderId, int count) throws OrderNotFoundException {
+        Order order = getOrder(orderId);
+        for (int i = 0; i < count; ++i) {
+            order.addPancake(new PancakeBuilder().addMilkChocolate().addHazelNut().build());
         }
     }
 
@@ -57,13 +68,6 @@ public class OrderService {
         return pancakes.stream()
                 .filter(pancake -> pancake.getOrderId().equals(orderId))
                 .map(PancakeRecipe::description).toList();
-    }
-
-    private void addPancake(PancakeRecipe pancake, Order order) {
-        pancake.setOrderId(order.getId());
-        pancakes.add(pancake);
-
-        OrderLog.logAddPancake(order, pancake.description(), pancakes);
     }
 
     public void removePancakes(String description, UUID orderId, int count) {
