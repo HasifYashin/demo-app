@@ -20,8 +20,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.pancakelab.controller.OrderController;
 import org.pancakelab.exceptions.InvalidIngredientInputException;
 import org.pancakelab.model.Order;
-import org.pancakelab.model.pancake.Pancake;
-import org.pancakelab.model.pancake.PancakeDirector;
+import org.pancakelab.model.Pancake;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -35,10 +34,9 @@ public class PancakeServiceTest {
 
     @BeforeAll
     public void setup() throws InvalidIngredientInputException {
-        PancakeDirector pancakeDirector = new PancakeDirector();
-        darkChocolatePancake = pancakeDirector.makePancake(Set.of("DARKCHOCOLATE"));
-        milkChocolatePancake = pancakeDirector.makePancake(Set.of("MILKCHOCOLATE"));
-        milkChocolateHazelnutPancake = pancakeDirector.makePancake(Set.of("MILKCHOCOLATE", "HAZELNUT"));
+        darkChocolatePancake = orderController.makePancake(Set.of("DARKCHOCOLATE"));
+        milkChocolatePancake = orderController.makePancake(Set.of("MILKCHOCOLATE"));
+        milkChocolateHazelnutPancake = orderController.makePancake(Set.of("MILKCHOCOLATE", "HAZELNUT"));
     }
 
     @Test

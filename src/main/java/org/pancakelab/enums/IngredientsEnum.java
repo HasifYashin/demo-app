@@ -1,4 +1,4 @@
-package org.pancakelab.model.ingredients;
+package org.pancakelab.enums;
 
 public enum IngredientsEnum {
     DARKCHOCOLATE,

@@ -6,7 +6,7 @@ import java.util.List;
 import org.pancakelab.exceptions.NotEnoughPancakesException;
 import org.pancakelab.exceptions.OrderNotFoundException;
 import org.pancakelab.model.Order;
-import org.pancakelab.model.pancake.Pancake;
+import org.pancakelab.model.Pancake;
 
 public class OrderService {
     private List<Order> orders = new ArrayList<>();

@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.pancakelab.exceptions.NotEnoughPancakesException;
-import org.pancakelab.model.pancake.Pancake;
 
 public class Order {
     private final UUID id;

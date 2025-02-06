@@ -1,7 +1,7 @@
 package org.pancakelab.service;
 
 import org.pancakelab.model.Order;
-import org.pancakelab.model.pancake.Pancake;
+import org.pancakelab.model.Pancake;
 
 public class OrderLog {
     private static final StringBuilder log = new StringBuilder();

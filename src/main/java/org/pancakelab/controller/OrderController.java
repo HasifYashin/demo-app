@@ -8,9 +8,10 @@ import java.util.stream.Collectors;
 import org.pancakelab.exceptions.InvalidIngredientInputException;
 import org.pancakelab.exceptions.NotEnoughPancakesException;
 import org.pancakelab.exceptions.OrderNotFoundException;
+import org.pancakelab.helpers.IngredientsValidator;
+import org.pancakelab.helpers.PancakeBuilder;
 import org.pancakelab.model.Order;
-import org.pancakelab.model.pancake.Pancake;
-import org.pancakelab.model.pancake.PancakeDirector;
+import org.pancakelab.model.Pancake;
 import org.pancakelab.service.ChefService;
 import org.pancakelab.service.DeliveryService;
 import org.pancakelab.service.OrderService;
@@ -40,17 +41,22 @@ public class OrderController {
         }
     }
 
+    public Pancake makePancake(Set<String> ingredientNames) throws InvalidIngredientInputException {
+        IngredientsValidator.validateIngredients(ingredientNames);
+        return new PancakeBuilder().makePancake(ingredientNames);
+    }
+
     public void addPancake(Set<String> ingredientNames, UUID orderId, int count)
             throws OrderNotFoundException, InvalidIngredientInputException {
         Order order = getNotCompletedOrder(orderId);
-        Pancake pancake = new PancakeDirector().makePancake(ingredientNames);
+        Pancake pancake = makePancake(ingredientNames);
         orderService.addPancakes(order, pancake, count);
     }
 
     public void removePancakes(Set<String> ingredientNames, UUID orderId, int count)
             throws NotEnoughPancakesException, OrderNotFoundException, InvalidIngredientInputException {
         Order order = getNotCompletedOrder(orderId);
-        Pancake pancake = new PancakeDirector().makePancake(ingredientNames);
+        Pancake pancake = makePancake(ingredientNames);
         orderService.removePancakes(pancake, order, count);
     }
 
