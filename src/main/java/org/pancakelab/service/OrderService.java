@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.pancakelab.exceptions.NotEnoughPancakesException;
 import org.pancakelab.exceptions.OrderNotFoundException;
+import org.pancakelab.helpers.OrderLog;
 import org.pancakelab.model.Order;
 import org.pancakelab.model.Pancake;
 

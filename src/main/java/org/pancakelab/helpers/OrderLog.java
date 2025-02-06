@@ -1,4 +1,4 @@
-package org.pancakelab.service;
+package org.pancakelab.helpers;
 
 import org.pancakelab.model.Order;
 import org.pancakelab.model.Pancake;

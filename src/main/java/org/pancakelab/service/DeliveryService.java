@@ -3,6 +3,7 @@ package org.pancakelab.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pancakelab.helpers.OrderLog;
 import org.pancakelab.model.Order;
 
 /**
