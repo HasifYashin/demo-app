@@ -58,11 +58,6 @@ public class PancakeServiceTest {
     }
 
     @Test
-    public void GivenDarkchocolatePancake_ThenCorrectDescription_Test() {
-        assertEquals("Dark Chocolate Pancake", darkChocolatePancake.getDescription());
-    }
-
-    @Test
     @org.junit.jupiter.api.Order(20)
     public void GivenOrderExists_WhenAddingPancakes_ThenCorrectNumberOfPancakesAdded_Test() throws Exception {
         // setup
@@ -200,7 +195,7 @@ public class PancakeServiceTest {
     }
 
     @Test
-    @org.junit.jupiter.api.Order(70)
+    @org.junit.jupiter.api.Order(80)
     public void GivenNoIngredients_WhenAddingPancake_ThenExceptionIsThrown_Test() throws Exception {
         // setup
         order = orderController.createOrder(10, 20);
@@ -213,6 +208,20 @@ public class PancakeServiceTest {
         // verify
 
         // tear down
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(90)
+    public void GivenDarkchocolatePancake_ThenCorrectDescription_Test() {
+        // setup
+
+        // exercise
+
+        // verify
+        assertEquals("Dark Chocolate Pancake", darkChocolatePancake.getDescription());
+
+        // tear down
+
     }
 
     private void addPancakes() throws Exception {
