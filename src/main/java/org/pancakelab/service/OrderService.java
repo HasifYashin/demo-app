@@ -30,11 +30,17 @@ public class OrderService {
         OrderLog.logRemovePancakes(order, pancake, count);
     }
 
+    /*
+     * Cancels the order based on user input. Order will not proceed further.
+     */
     public synchronized void cancelOrder(Order order) {
         OrderLog.logCancelOrder(order);
         orders.remove(order);
     }
 
+    /*
+     * Specifies that user configuration of the order is complete
+     */
     public synchronized void completeOrder(Order order) {
         OrderLog.logCompleteOrder(order);
         orders.remove(order);

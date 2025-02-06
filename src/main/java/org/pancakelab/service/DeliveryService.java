@@ -21,6 +21,9 @@ public class DeliveryService {
         return orders;
     }
 
+    /*
+     * Completes the delivery of the order.
+     */
     public synchronized void deliverOrder(Order order) {
         OrderLog.logDeliverOrder(order);
         orders.remove(order);

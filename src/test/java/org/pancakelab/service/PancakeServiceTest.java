@@ -2,6 +2,7 @@ package org.pancakelab.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.pancakelab.controller.OrderController;
+import org.pancakelab.exceptions.InvalidIngredientInputException;
 import org.pancakelab.model.Order;
 import org.pancakelab.model.pancake.Pancake;
 import org.pancakelab.model.pancake.PancakeDirector;
@@ -31,11 +34,11 @@ public class PancakeServiceTest {
     private Pancake darkChocolatePancake, milkChocolatePancake, milkChocolateHazelnutPancake;
 
     @BeforeAll
-    public void setup() {
+    public void setup() throws InvalidIngredientInputException {
         PancakeDirector pancakeDirector = new PancakeDirector();
-        darkChocolatePancake = pancakeDirector.makeDarkChocolatePancake();
-        milkChocolatePancake = pancakeDirector.makeMilkChocolatePancake();
-        milkChocolateHazelnutPancake = pancakeDirector.makeMilkChocolateHazelnutPancake();
+        darkChocolatePancake = pancakeDirector.makePancake(Set.of("DARKCHOCOLATE"));
+        milkChocolatePancake = pancakeDirector.makePancake(Set.of("MILKCHOCOLATE"));
+        milkChocolateHazelnutPancake = pancakeDirector.makePancake(Set.of("MILKCHOCOLATE", "HAZELNUT"));
     }
 
     @Test
@@ -87,9 +90,9 @@ public class PancakeServiceTest {
         // setup
 
         // exercise
-        orderController.removePancakes("DARK_CHOCOLATE_PANCAKE", order.getId(), 2);
-        orderController.removePancakes("MILK_CHOCOLATE_PANCAKE", order.getId(), 3);
-        orderController.removePancakes("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", order.getId(), 1);
+        orderController.removePancakes(Set.of("DARKCHOCOLATE"), order.getId(), 2);
+        orderController.removePancakes(Set.of("MILKCHOCOLATE"), order.getId(), 3);
+        orderController.removePancakes(Set.of("MILKCHOCOLATE", "HAZELNUT"), order.getId(), 1);
 
         // verify
         List<Pancake> pancakesLeftInOrder = orderController.getNotCompletedOrder(order.getId()).getPancakes();
@@ -177,9 +180,44 @@ public class PancakeServiceTest {
         // tear down
     }
 
+    @Test
+    @org.junit.jupiter.api.Order(70)
+    public void GivenInvalidIngredient_WhenAddingPancake_ThenExceptionIsThrown_Test() throws Exception {
+        // setup
+        order = orderController.createOrder(10, 20);
+        Set<String> invalidIngredients = Set.of("MUSTARD");
+
+        // exercise
+        assertThrows(InvalidIngredientInputException.class,
+                () -> orderController.addPancake(invalidIngredients, order.getId(), 3));
+
+        // verify
+        List<Pancake> pancakesInOrder = orderController.getNotCompletedOrder(order.getId()).getPancakes();
+        Set<String> pancakeNames = pancakesInOrder.stream().map(Pancake::getDescription).collect(Collectors.toSet());
+        assertFalse(pancakeNames.contains("MUSTARD"));
+
+        // tear down
+    }
+
+    @Test
+    @org.junit.jupiter.api.Order(70)
+    public void GivenNoIngredients_WhenAddingPancake_ThenExceptionIsThrown_Test() throws Exception {
+        // setup
+        order = orderController.createOrder(10, 20);
+        Set<String> invalidIngredients = Set.of();
+
+        // exercise
+        assertThrows(InvalidIngredientInputException.class,
+                () -> orderController.addPancake(invalidIngredients, order.getId(), 3));
+
+        // verify
+
+        // tear down
+    }
+
     private void addPancakes() throws Exception {
-        orderController.addPancake("DARK_CHOCOLATE_PANCAKE", order.getId(), 3);
-        orderController.addPancake("MILK_CHOCOLATE_PANCAKE", order.getId(), 3);
-        orderController.addPancake("MILK_CHOCOLATE_HAZELNUTS_PANCAKE", order.getId(), 3);
+        orderController.addPancake(Set.of("DARKCHOCOLATE"), order.getId(), 3);
+        orderController.addPancake(Set.of("MILKCHOCOLATE"), order.getId(), 3);
+        orderController.addPancake(Set.of("MILKCHOCOLATE", "HAZELNUT"), order.getId(), 3);
     }
 }

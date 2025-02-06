@@ -7,7 +7,7 @@ import org.pancakelab.model.Order;
 
 /**
  * Class handling preperation of orders.
- * It receives an once a user has completed it.
+ * It receives an order once a user has completed configuring it.
  */
 public class ChefService {
     private final List<Order> orders = new ArrayList<>();
@@ -20,6 +20,9 @@ public class ChefService {
         return orders;
     }
 
+    /*
+     * Completes the preparation of the order.
+     */
     public synchronized void prepareOrder(Order order) {
         OrderLog.logPrepareOrder(order);
         orders.remove(order);
